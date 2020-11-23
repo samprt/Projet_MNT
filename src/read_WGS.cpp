@@ -40,3 +40,11 @@ std::vector<std::vector<float>> ReadWGS::read_raw()
 
 	return v;
 }
+
+std::vector<std::vector<float>> ReadWGS::project()
+{
+	std::vector<std::vector<float>> raw_data;
+	raw_data = read_raw();
+
+
+}

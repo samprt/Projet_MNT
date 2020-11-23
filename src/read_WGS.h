@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <vector>
+#include "WGS84toCartesian.hpp"
 
 
 class ReadWGS
@@ -14,6 +15,7 @@ class ReadWGS
 		~ReadWGS();
 
 		std::vector<std::vector<float>> read_raw();
+		std::vector<std::vector<float>> project();
 
 	protected:
 		const std::string m_filename; 
