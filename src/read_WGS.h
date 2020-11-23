@@ -6,19 +6,21 @@
 #include <vector>
 #include "WGS84toCartesian.hpp"
 
+using namespace std;
+
 
 class ReadWGS
 {
 	public:
 
-		ReadWGS(const std::string filemane);
+		ReadWGS(const string filemane);
 		~ReadWGS();
 
-		std::vector<std::vector<float>> read_raw();
-		std::vector<std::vector<float>> project();
+		vector<vector<float>> read_raw();
+		vector<vector<float>> project();
 
 	protected:
-		const std::string m_filename; 
+		const string m_filename;
 };
 	
 	
