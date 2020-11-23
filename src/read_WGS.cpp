@@ -1,7 +1,8 @@
 #include "read_WGS.h"
-#include <fstream>
 #include <iostream>
 #include <algorithm>
+#include "WGS84toCartesian.hpp"
+
 
 using namespace std;
 

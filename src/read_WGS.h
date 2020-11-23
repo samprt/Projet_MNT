@@ -5,7 +5,6 @@
 #include <fstream>
 #include <vector>
 #include <array>
-#include "WGS84toCartesian.hpp"
 
 using namespace std;
 
