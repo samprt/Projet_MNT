@@ -16,20 +16,27 @@ class ReadWGS
 		ReadWGS(const string filemane, const int width);
 		~ReadWGS();
 
-		array<vector<float>, 3> read_raw();
-		array<vector<float>, 3> read_and_project();
-		array<float, 2> get_scaled_dimensions();
-		array<vector<float>, 3> rearange_data();
+		vector<vector<float>> read_raw();
+		vector<vector<float>> read_and_project();
+		vector<vector<float>> rearange_data();
+		
 
-		array<vector<float>, 3> data;
+		vector<vector<float>> data;
 		float max_data_x;
 		float min_data_x;
 		float max_data_y;
 		float min_data_y;
+		float m_data_width;
+		float m_data_height;
+		const int m_scaled_width;
+		int m_scaled_height;
+
+		//array<array<float, m_scaled_height>, m_scaled_width> create_data_matrix();
+
 
 	protected:
 		const string m_filename;
-		const int m_width;
+		
 };
 	
 	

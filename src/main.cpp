@@ -5,11 +5,13 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char *argv[])
 {
-	ReadWGS *data_reader = new ReadWGS("Guerledan_Feb19_50cm_wgs84.txt", 800);
+	ReadWGS *data_reader = new ReadWGS(argv[1], stoi(argv[2]));
 	PGM_handler *handler = new PGM_handler(10, 3);
-	cout << data_reader->get_scaled_dimensions()[1] << endl;
+	
+	data_reader->rearange_data();
+	cout << data_reader->data[0][0] << endl;
 	//handler->create_ASCII_PGM_from_data(data);
 
 

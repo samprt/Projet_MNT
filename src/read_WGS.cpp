@@ -6,13 +6,19 @@
 
 using namespace std;
 
-ReadWGS::ReadWGS(const string filename, const int width) : m_filename(filename), m_width(width)
+ReadWGS::ReadWGS(const string filename, const int width) : m_filename(filename), m_scaled_width(width)
 {
 	data = read_and_project();
 	max_data_x = *max_element(data[0].begin(), data[0].end());
 	min_data_x = *min_element(data[0].begin(), data[0].end());
 	max_data_y = *max_element(data[1].begin(), data[1].end());
 	min_data_y = *min_element(data[1].begin(), data[1].end());
+
+	m_data_width = max_data_x - min_data_x;
+	m_data_height = max_data_y - min_data_y;
+
+	m_scaled_height = (m_data_height * m_scaled_width) / m_data_width;
+
 }
 
 ReadWGS::~ReadWGS()
@@ -20,10 +26,10 @@ ReadWGS::~ReadWGS()
 
 }
 
-array<vector<float>, 3> ReadWGS::read_raw()
+vector<vector<float>> ReadWGS::read_raw()
 {
 	ifstream ifst(m_filename);
-	array<vector<float>, 3> data;
+	vector<vector<float>> data;
 	vector<float> lat;
 	vector<float> lon;
 	vector<float> h;
@@ -48,14 +54,16 @@ array<vector<float>, 3> ReadWGS::read_raw()
 		h.push_back(height);
 	}
 
-	data = {lat, lon, h};
+	data.push_back(lat);
+	data.push_back(lon);
+	data.push_back(h);
 
 	return data;
 }
 
-array<vector<float>, 3> ReadWGS::read_and_project()
+vector<vector<float>> ReadWGS::read_and_project()
 {
-	array<vector<float>, 3> raw_data;
+	vector<vector<float>> raw_data;
 	raw_data = read_raw();
 
 	vector<float> x;
@@ -71,22 +79,31 @@ array<vector<float>, 3> ReadWGS::read_and_project()
 		y.push_back(cartesianPosition[1]);
 
 	}
-	array<vector<float>, 3> projected_data;
-	projected_data[0] = x;
-	projected_data[1] = y;
-	projected_data[2] = raw_data[2];
+	vector<vector<float>> projected_data;
+	projected_data.push_back(x);
+	projected_data.push_back(y);
+	projected_data.push_back(raw_data[2]);
 
 	return projected_data;
 }
 
-array<float, 2> ReadWGS::get_scaled_dimensions()
+
+vector<vector<float>> transpose(vector<vector<float>>& vect)
 {
-	int width = max_data_x - min_data_x;
-	int height = max_data_y - min_data_y;
-
-	int scaled_width = m_width;
-	int scaled_height = (height * m_width) / width;
-
-	return array<float, 2> {scaled_width, scaled_height}; 
+	vector<vector<float>> transposed(vect[0].size(), vector<float>());
+	for (size_t i = 0 ; i < vect.size() ; i++)
+		for (size_t j = 0 ; j < vect[0].size() ; j++)
+			transposed[j].push_back(vect[i][j]);
+	return transposed;
 }
+
+vector<vector<float>> ReadWGS::rearange_data()
+{
+	data = transpose(data);
+	sort(data.begin(), data.end(), [](const vector<float>& lhs, const vector<float>& rhs){return lhs[0] < rhs[0];});
+	data = transpose(data);
+	return data;
+}
+
+
 
