@@ -6,9 +6,13 @@
 
 using namespace std;
 
-ReadWGS::ReadWGS(const string filename) : m_filename(filename)
+ReadWGS::ReadWGS(const string filename, const int width) : m_filename(filename), m_width(width)
 {
-
+	data = read_and_project();
+	max_data_x = *max_element(data[0].begin(), data[0].end());
+	min_data_x = *min_element(data[0].begin(), data[0].end());
+	max_data_y = *max_element(data[1].begin(), data[1].end());
+	min_data_y = *min_element(data[1].begin(), data[1].end());
 }
 
 ReadWGS::~ReadWGS()
@@ -49,7 +53,7 @@ array<vector<float>, 3> ReadWGS::read_raw()
 	return data;
 }
 
-array<vector<float>, 3> ReadWGS::project()
+array<vector<float>, 3> ReadWGS::read_and_project()
 {
 	array<vector<float>, 3> raw_data;
 	raw_data = read_raw();
@@ -74,3 +78,15 @@ array<vector<float>, 3> ReadWGS::project()
 
 	return projected_data;
 }
+
+array<float, 2> ReadWGS::get_scaled_dimensions()
+{
+	int width = max_data_x - min_data_x;
+	int height = max_data_y - min_data_y;
+
+	int scaled_width = m_width;
+	int scaled_height = (height * m_width) / width;
+
+	return array<float, 2> {scaled_width, scaled_height}; 
+}
+
