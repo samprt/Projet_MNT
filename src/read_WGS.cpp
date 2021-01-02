@@ -6,6 +6,10 @@
 
 using namespace std;
 
+/**
+* This function creates the file reader that will read from file "filename"
+* We must also give the width of the final MNT image
+*/
 ReadWGS::ReadWGS(const string filename, const int width) : m_filename(filename), m_scaled_width(width)
 {
 	data = read_and_project();
@@ -26,6 +30,9 @@ ReadWGS::~ReadWGS()
 
 }
 
+/**
+* Reads the raw data from the file and stores it in a vector of shape (3, length(file))
+*/
 vector<vector<float>> ReadWGS::read_raw()
 {
 	ifstream ifst(m_filename);
@@ -61,6 +68,9 @@ vector<vector<float>> ReadWGS::read_raw()
 	return data;
 }
 
+/**
+* Reads the raw daa from file and then projects it from WGS coordinates to Cartesian coordinates with the most north-western point being (0, 0)
+*/
 vector<vector<float>> ReadWGS::read_and_project()
 {
 	vector<vector<float>> raw_data;
@@ -77,17 +87,25 @@ vector<vector<float>> ReadWGS::read_and_project()
 		array<double, 2> cartesianPosition = wgs84::toCartesian({max_lat, min_lon} /* reference position */, {raw_data[0][n], raw_data[1][n]} /* position to be converted */);
 		x.push_back(cartesianPosition[0]);
 		y.push_back(cartesianPosition[1]);
-
 	}
 	vector<vector<float>> projected_data;
 	projected_data.push_back(x);
 	projected_data.push_back(y);
 	projected_data.push_back(raw_data[2]);
 
+
+	ofstream f("projected_data.txt");
+	for (int i = 0 ; i < projected_data[0].size() ; i++)
+	{
+		f << projected_data[0][i] << " " << projected_data[1][i] << " " << projected_data[2][i] << "\n";
+	}
+
 	return projected_data;
 }
 
-
+/**
+* A simple function that transposes a 2D vector
+*/
 vector<vector<float>> transpose(vector<vector<float>>& vect)
 {
 	vector<vector<float>> transposed(vect[0].size(), vector<float>());
@@ -96,7 +114,9 @@ vector<vector<float>> transpose(vector<vector<float>>& vect)
 			transposed[j].push_back(vect[i][j]);
 	return transposed;
 }
-
+/**
+* A function that reaaranges the data along the x axis
+*/
 vector<vector<float>> ReadWGS::rearange_data()
 {
 	data = transpose(data);
