@@ -18,7 +18,7 @@ class ReadWGS
 
 		vector<vector<float>> read_raw();
 		vector<vector<float>> read_and_project();
-		vector<vector<float>> rearange_data();
+		vector<vector<float>> rescale_data();
 		
 
 		vector<vector<float>> data;
