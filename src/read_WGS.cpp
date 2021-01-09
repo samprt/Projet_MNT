@@ -31,12 +31,14 @@ ReadWGS::ReadWGS(const string filename, const int width) : m_filename(filename),
 	m_data_height = max_data_y - min_data_y;
 	
 
+	/*
 	cout << max_data_x << endl;
 	cout << min_data_x << endl;
 	cout << max_data_y << endl;
 	cout << min_data_y << endl;
 	cout << m_data_width << endl;
 	cout << m_data_height << endl;
+	*/
 
 	m_scaled_height = floor(m_data_height * m_scaled_width) / m_data_width;
 

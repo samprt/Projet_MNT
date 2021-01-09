@@ -6,8 +6,10 @@
 
 using namespace std;
 
+
 int main(int argc, char *argv[])
 {
+	
 	if (argc != 3)
 	{
 		cout << "\nPlease specify the data file and width of image to create.\n" << endl;
@@ -24,7 +26,7 @@ int main(int argc, char *argv[])
 	PGM_handler handler(data_reader.m_scaled_width, data_reader.m_scaled_height);
 	
 	handler.create_ASCII_PGM_from_data(data);
-
+	handler.create_binary_PGM_from_data(data);
 
 	return EXIT_SUCCESS;
 }
