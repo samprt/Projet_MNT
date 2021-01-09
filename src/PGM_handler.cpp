@@ -17,6 +17,30 @@ PGM_handler::~PGM_handler()
 
 }
 
+void PGM_handler::create_simple_image()
+{
+  ofstream fout("test_PGM.pgm");
+
+  if (!fout.is_open())
+  {
+     cout << "Can't open output file" << endl;
+  }
+
+  fout << "P2\n" << 5 << " " << 5 << "\n" << 25 << "\n";
+
+  int t = 0;
+  for (int i=0 ; i<5 ; i++)
+  {
+    for (int j=0 ; j<5 ; j++)
+    {
+      fout << t << " ";
+      t++; 
+    }
+    fout << "\n";
+  }
+  fout.close();
+}
+
 int NumDigits(int x)
 {
   int length = 1;
@@ -42,9 +66,9 @@ void PGM_handler::create_ASCII_PGM_from_data(vector<vector<float>> data)
   for (int i = 0; i<data[0].size() ; i++)
   {
     // Get integer values of data
-    int approx_x = floor(data[0][i]);
-    int approx_y = floor(data[1][i]);
-    int approx_h = floor(data[2][i]);
+    int approx_x = int(data[0][i]);
+    int approx_y = int(data[1][i]);
+    int approx_h = int(data[2][i]);
 
     // Check if approx_x and approx_y are not out of array points
     if (approx_x < 0) approx_x=0;
@@ -56,31 +80,40 @@ void PGM_handler::create_ASCII_PGM_from_data(vector<vector<float>> data)
 
   }
   
-	auto max_h = floor(*max_element(data[2].begin(), data[2].end())); // Max h value will be white
+	// Get max height value for PGM file header
+  auto max_h = floor(*max_element(data[2].begin(), data[2].end())); // Max h value will be white
 
-	ofstream fout("test_PGM.pgm");
-
-	if (!fout.is_open())
+	// Open file and write header
+  ofstream fout("Guerledan_PGM_ASCII.pgm");
+  if (!fout.is_open())
   {
      cout << "Can't open output file" << endl;
   }
-
   fout << "P2\n" << m_width << " " << m_height << "\n" << max_h << "\n";
 
+  // Write file : if the number of characters on the line exeeds 70 -> new line
   int nb_characters_on_line = 0;
+  int t;
   for (int i=0 ; i<m_width ; i++)
   {
     for (int j=0 ; j<m_height ; j++)
     {
-      int point = points[i][j];
+      fout << points[i][j];
+      t = NumDigits(points[i][j]);
+      nb_characters_on_line += t;
+
+      // Add space or new line after character
       if (nb_characters_on_line == 70)
       {
         fout << "\n";
         nb_characters_on_line = 0;
       }
-      fout << points[i][j] << " ";
-      int t = NumDigits(points[i][j]);
-      nb_characters_on_line += t + 1;
+      else
+      {
+        fout << " ";
+        nb_characters_on_line++;
+      }
+      
     }
   }
   fout.close();
@@ -121,7 +154,7 @@ void PGM_handler::create_binary_PGM_from_data(vector<vector<float>> data)
   
   auto max_h = floor(*max_element(data[2].begin(), data[2].end())); // Max h value will be white
 
-  ofstream fout("test_PGM_binary.pgm");
+  ofstream fout("Guerledan_PGM_binary.pgm");
 
   if (!fout.is_open())
   {
