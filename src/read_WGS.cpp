@@ -43,7 +43,6 @@ ReadWGS::ReadWGS(const string filename, const int width) : m_filename(filename),
 	m_scaled_height = floor(m_data_height * m_scaled_width) / m_data_width;
 
 	data = rescale_data();
-
 }
 
 ReadWGS::~ReadWGS()
