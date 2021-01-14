@@ -98,22 +98,9 @@ void PGM_handler::create_ASCII_PGM_from_data(vector<vector<float>> data)
   {
     for (int j=0 ; j<m_height ; j++)
     {
-      fout << int(points[i][j]);
-      t = NumDigits(points[i][j]);
-      nb_characters_on_line += t;
-
-      // Add space or new line after character
-      if (nb_characters_on_line > 67)
-      {
-        fout << "\n";
-        nb_characters_on_line = 0;
-      }
-      else
-      {
-        fout << " ";
-        nb_characters_on_line++;
-      } 
+      fout << int(points[i][j]) << " "; 
     }
+    fout << "\n";
   }
   fout.close();
 }
@@ -168,7 +155,6 @@ void PGM_handler::create_binary_PGM_from_data(vector<vector<float>> data)
     {
       fout << points[i][j];
     }
-    fout << "\n";
   }
   fout.close();
 }

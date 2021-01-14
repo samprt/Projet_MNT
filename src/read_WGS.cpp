@@ -1,6 +1,5 @@
 #include "read_WGS.h"
 #include <iostream>
-#include <cmath>
 #include <algorithm>
 #include "WGS84toCartesian.hpp"
 
@@ -31,16 +30,7 @@ ReadWGS::ReadWGS(const string filename, const int width) : m_filename(filename),
 	m_data_height = max_data_y - min_data_y;
 	
 
-	/*
-	cout << max_data_x << endl;
-	cout << min_data_x << endl;
-	cout << max_data_y << endl;
-	cout << min_data_y << endl;
-	cout << m_data_width << endl;
-	cout << m_data_height << endl;
-	*/
-
-	m_scaled_height = floor(m_data_height * m_scaled_width) / m_data_width;
+	m_scaled_height = int((m_data_height * m_scaled_width) / m_data_width);
 
 	data = rescale_data();
 }
@@ -114,12 +104,6 @@ vector<vector<float>> ReadWGS::read_and_project()
 	projected_data.push_back(raw_data[2]);
 
 
-	/*ofstream f("projected_data.txt");
-	for (int i = 0 ; i < projected_data[0].size() ; i++)
-	{
-		f << projected_data[0][i] << " " << projected_data[1][i] << " " << projected_data[2][i] << "\n";
-	}*/
-
 	return projected_data;
 }
 
@@ -132,7 +116,7 @@ vector<vector<float>> ReadWGS::rescale_data()
 	for (int i=0 ; i<data[0].size() ; i++)
 	{
 		data[0][i] *= m_scaled_width/max_data_x;
-		data[1][i] *= m_scaled_height/max_data_y;
+		data[1][i] *= m_scaled_width/max_data_x;
 	}
 	return data;
 }
